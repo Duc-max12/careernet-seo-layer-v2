@@ -1,25 +1,22 @@
-export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
+export default async function Page({ params }: any) {
   const { slug } = await params;
   
-  // Gọi API lấy dữ liệu thực tế của GMO
+  // Gọi API lấy dữ liệu thực tế của GMO từ Supabase của anh
   const res = await fetch(`https://cxyvrjgwrbftlzzuewuu.supabase.co/functions/v1/company-seo-page?slug=${slug}`, { cache: 'no-store' });
   const data = await res.json();
 
   return (
-    <main style={{ fontFamily: 'sans-serif' }}>
-      {/* Phần Text chuẩn SEO hiện lên đầu trang */}
-      <div style={{ padding: '20px', background: '#f9f9f9', borderBottom: '2px solid #0070f3' }}>
-        <h1 style={{ color: '#333' }}>{data.company?.name || slug}</h1>
-        <p><b>Địa chỉ:</b> {data.company?.detailed_address || 'Đang cập nhật'}</p>
-        <div style={{ whiteSpace: 'pre-line', marginTop: '15px', color: '#666' }}>
-          {data.company?.description}
-        </div>
+    <main style={{ padding: '20px', fontFamily: 'sans-serif' }}>
+      {/* Thông tin cho Google Bot - Lấy từ data.company */}
+      <div style={{ background: '#f5f5f5', padding: '15px', borderRadius: '8px' }}>
+        <h1>{data.company?.name || slug}</h1>
+        <p>{data.company?.description}</p>
       </div>
 
-      {/* Nhúng giao diện Careernet bên dưới */}
+      {/* Giao diện Careernet cho người dùng */}
       <iframe 
         src={`https://careernet.asia/cong-ty/${slug}`} 
-        style={{ width: '100%', height: '100vh', border: 'none' }}
+        style={{ width: '100%', height: '800px', border: 'none', marginTop: '20px' }}
       />
     </main>
   );
